@@ -1,0 +1,193 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.3 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated as
+% required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+\datalist[entry]{nyt/global//global/global/global}
+  \entry{banquemondiale2023}{misc}{}{}
+    \name{author}{1}{}{%
+      {{hash=B}{%
+         family={{Banque Mondiale}},
+         familyi={B\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{B1}
+    \strng{fullhash}{B1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{B}
+    \field{sortinithash}{B}
+  \field{howpublished}{\url{https://www.banquemondiale.org/fr/country/cameroon/overview}}
+    \field{note}{Consulté en 2025}
+    \field{title}{Cameroun — Vue d'ensemble économique 2023}
+    \field{year}{2023}
+  \endentry
+
+  \entry{cherny2019}{book}{}{}
+    \name{author}{1}{}{%
+      {{hash=CB}{%
+         family={Cherny},
+         familyi={C\bibinitperiod},
+         given={Boris},
+         giveni={B\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {O'Reilly Media}%
+    }
+    \strng{namehash}{CB1}
+    \strng{fullhash}{CB1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{C}
+    \field{sortinithash}{C}
+    \field{isbn}{978-1492037651}
+    \field{title}{Programming TypeScript: Making Your JavaScript Applications
+  Scale}
+    \list{location}{1}{%
+      {Sebastopol, CA}%
+    }
+    \field{year}{2019}
+  \endentry
+
+  \entry{eisenman2015}{book}{}{}
+    \name{author}{1}{}{%
+      {{hash=EB}{%
+         family={Eisenman},
+         familyi={E\bibinitperiod},
+         given={Bonnie},
+         giveni={B\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {O'Reilly Media}%
+    }
+    \strng{namehash}{EB1}
+    \strng{fullhash}{EB1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{E}
+    \field{sortinithash}{E}
+    \field{isbn}{978-1491929001}
+    \field{title}{Learning React Native: Building Native Mobile Apps with
+  JavaScript}
+    \list{location}{1}{%
+      {Sebastopol, CA}%
+    }
+    \field{year}{2015}
+  \endentry
+
+  \entry{fielding2000}{thesis}{}{}
+    \name{author}{1}{}{%
+      {{hash=FRT}{%
+         family={Fielding},
+         familyi={F\bibinitperiod},
+         given={Roy\bibnamedelima Thomas},
+         giveni={R\bibinitperiod\bibinitdelim T\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{FRT1}
+    \strng{fullhash}{FRT1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{F}
+    \field{sortinithash}{F}
+    \field{title}{Architectural Styles and the Design of Network-based Software
+  Architectures}
+    \verb{url}
+    \verb https://www.ics.uci.edu/~fielding/pubs/dissertation/top.htm
+    \endverb
+    \list{institution}{1}{%
+      {University of California, Irvine}%
+    }
+    \field{type}{phdthesis}
+    \field{year}{2000}
+  \endentry
+
+  \entry{jones2015}{article}{}{}
+    \name{author}{3}{}{%
+      {{hash=JMB}{%
+         family={Jones},
+         familyi={J\bibinitperiod},
+         given={Michael\bibnamedelima B.},
+         giveni={M\bibinitperiod\bibinitdelim B\bibinitperiod},
+      }}%
+      {{hash=BJ}{%
+         family={Bradley},
+         familyi={B\bibinitperiod},
+         given={John},
+         giveni={J\bibinitperiod},
+      }}%
+      {{hash=SN}{%
+         family={Sakimura},
+         familyi={S\bibinitperiod},
+         given={Nat},
+         giveni={N\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{JMBBJSN1}
+    \strng{fullhash}{JMBBJSN1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{J}
+    \field{sortinithash}{J}
+    \field{title}{{JSON Web Token (JWT)}}
+    \verb{url}
+    \verb https://tools.ietf.org/html/rfc7519
+    \endverb
+    \field{journaltitle}{IETF RFC 7519}
+    \field{year}{2015}
+  \endentry
+
+  \entry{twiga2023}{misc}{}{}
+    \name{author}{1}{}{%
+      {{hash=T}{%
+         family={{Twiga Foods}},
+         familyi={T\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{T1}
+    \strng{fullhash}{T1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{T}
+    \field{sortinithash}{T}
+    \field{howpublished}{\url{https://twiga.com}}
+    \field{note}{Consulté en 2025}
+    \field{title}{Twiga Foods — Connecting African Food Systems}
+    \field{year}{2023}
+  \endentry
+
+  \entry{springboot2024}{misc}{}{}
+    \name{author}{1}{}{%
+      {{hash=V}{%
+         family={{VMware Pivotal}},
+         familyi={V\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{V1}
+    \strng{fullhash}{V1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{V}
+    \field{sortinithash}{V}
+  \field{howpublished}{\url{https://docs.spring.io/spring-boot/docs/current/reference/html/}}
+    \field{note}{Consulté en 2025}
+    \field{title}{Spring Boot Reference Documentation 3.x}
+    \field{year}{2024}
+  \endentry
+\enddatalist
+\endinput
