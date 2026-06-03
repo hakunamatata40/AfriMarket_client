@@ -93,12 +93,19 @@ export default function LoginScreen() {
               </View>
             </View>
 
+            <TouchableOpacity
+              onPress={() => router.push('/(auth)/forgot-password' as any)}
+              style={styles.forgotRow}
+            >
+              <Text style={styles.forgotLink}>Mot de passe oublié ?</Text>
+            </TouchableOpacity>
+
             <AfriButton
               label="Se connecter"
               onPress={handleLogin}
               loading={loading}
               size="lg"
-              style={{ marginTop: 8 }}
+              style={{ marginTop: 4 }}
             />
 
             <View style={styles.divider}>
@@ -204,6 +211,8 @@ const styles = StyleSheet.create({
   },
   line: { flex: 1, height: 1, backgroundColor: Colors.border },
   orText: { fontFamily: 'DMSans_400Regular', fontSize: 12, color: Colors.textDim },
+  forgotRow: { alignItems: 'flex-end', marginBottom: 4 },
+  forgotLink: { fontFamily: 'DMSans_400Regular', fontSize: 13, color: Colors.orange },
   linkRow: { alignItems: 'center' },
   link: { fontFamily: 'DMSans_400Regular', fontSize: 13, color: Colors.textSecondary },
   demoBox: {

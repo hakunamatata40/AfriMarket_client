@@ -1,11 +1,15 @@
 import AfriButton from '@/components/ui/AfriButton';
 import ProgressBar from '@/components/ui/ProgressBar';
 import { Colors } from '@/constants/colors';
+import { startConversation } from '@/services/messages.service';
 import { CATEGORY_LABELS, DEMO_OFFERS, fetchOffer, Offer } from '@/services/offers.service';
+import { useAuthStore } from '@/store/auth.store';
 import { Image } from 'expo-image';
 import { router, useLocalSearchParams } from 'expo-router';
 import React, { useEffect, useRef, useState } from 'react';
 import {
+  ActivityIndicator,
+  Alert,
   Animated,
   Dimensions,
   FlatList,
@@ -70,8 +74,10 @@ function timeLeft(expiresAt: string) {
 export default function OfferDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const insets = useSafeAreaInsets();
+  const user = useAuthStore((s) => s.user);
   const [offer, setOffer] = useState<Offer | null>(null);
   const [loading, setLoading] = useState(true);
+  const [contacting, setContacting] = useState(false);
   const scrollY = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
@@ -96,10 +102,31 @@ export default function OfferDetailScreen() {
     extrapolate: 'clamp',
   });
 
+  const handleContact = async () => {
+    if (!offer?.producerId) {
+      Alert.alert('Erreur', 'Impossible de contacter ce producteur.');
+      return;
+    }
+    if (user?.role === 'PRODUCER' && user.id === offer.producerId) {
+      Alert.alert('Info', "Vous ne pouvez pas vous contacter vous-même.");
+      return;
+    }
+    setContacting(true);
+    try {
+      const conv = await startConversation(offer.producerId, Number(offer.id));
+      router.push(`/conversation/${conv.id}` as any);
+    } catch {
+      Alert.alert('Erreur', 'Impossible de démarrer la conversation. Réessayez.');
+    } finally {
+      setContacting(false);
+    }
+  };
+
   if (!offer) return null;
 
   const isActive = offer.status === 'ACTIVE';
   const isThreshold = offer.status === 'THRESHOLD_REACHED';
+  const isProducer = user?.role === 'PRODUCER';
 
   return (
     <View style={styles.root}>
@@ -237,7 +264,23 @@ export default function OfferDetailScreen() {
 
       {/* CTA */}
       <View style={[styles.ctaBar, { paddingBottom: insets.bottom + 12 }]}>
-        {isActive && (
+        {/* Bouton Contacter le producteur — visible pour tous sauf le producteur lui-même */}
+        {!isProducer && offer.producerId && (
+          <TouchableOpacity
+            style={styles.contactBtn}
+            onPress={handleContact}
+            disabled={contacting}
+            activeOpacity={0.75}
+          >
+            {contacting ? (
+              <ActivityIndicator color={Colors.orange} size="small" />
+            ) : (
+              <Text style={styles.contactBtnText}>💬 Contacter le producteur</Text>
+            )}
+          </TouchableOpacity>
+        )}
+
+        {isActive && !isProducer && (
           <AfriButton
             label="Rejoindre cette commande →"
             onPress={() => router.push(`/join/${offer.id}`)}
@@ -250,7 +293,7 @@ export default function OfferDetailScreen() {
             <Text style={styles.thresholdMsg}>🎉 Seuil atteint — commandes clôturées</Text>
           </View>
         )}
-        {!isActive && !isThreshold && (
+        {!isActive && !isThreshold && !isProducer && (
           <View style={styles.inactiveBar}>
             <Text style={styles.inactiveMsg}>Cette offre n'accepte plus de commandes</Text>
           </View>
@@ -391,6 +434,20 @@ const styles = StyleSheet.create({
     borderTopColor: Colors.border,
     paddingHorizontal: 20,
     paddingTop: 12,
+    gap: 8,
+  },
+  contactBtn: {
+    borderWidth: 1.5,
+    borderColor: Colors.orange,
+    borderRadius: 14,
+    paddingVertical: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  contactBtnText: {
+    fontFamily: 'DMSans_600SemiBold',
+    fontSize: 14,
+    color: Colors.orange,
   },
   thresholdBar: {
     backgroundColor: Colors.greenLight,

@@ -28,8 +28,8 @@ export default function JoinOrderScreen() {
   const [loading, setLoading] = useState(false);
   const [swipeProgress, setSwipeProgress] = useState(0);
   const swipeX = useRef(new Animated.Value(0)).current;
-  const SWIPE_WIDTH = 280;
-  const SWIPE_THRESHOLD = 220;
+  const [trackWidth, setTrackWidth] = useState(280);
+  const handleConfirmRef = useRef<() => void>(() => {});
 
   useEffect(() => {
     async function load() {
@@ -48,18 +48,23 @@ export default function JoinOrderScreen() {
     load();
   }, [id]);
 
+  const trackWidthRef = useRef(280);
+
   const panResponder = useRef(
     PanResponder.create({
       onStartShouldSetPanResponder: () => true,
       onPanResponderMove: (_, gs) => {
-        const x = Math.max(0, Math.min(gs.dx, SWIPE_WIDTH - 52));
+        const maxX = trackWidthRef.current - 52;
+        const x = Math.max(0, Math.min(gs.dx, maxX));
         swipeX.setValue(x);
-        setSwipeProgress(x / (SWIPE_WIDTH - 52));
+        setSwipeProgress(x / maxX);
       },
       onPanResponderRelease: (_, gs) => {
-        if (gs.dx >= SWIPE_THRESHOLD) {
-          Animated.timing(swipeX, { toValue: SWIPE_WIDTH - 52, duration: 200, useNativeDriver: false }).start();
-          handleConfirm();
+        const maxX = trackWidthRef.current - 52;
+        const threshold = maxX * 0.75;
+        if (gs.dx >= threshold) {
+          Animated.timing(swipeX, { toValue: maxX, duration: 200, useNativeDriver: false }).start();
+          handleConfirmRef.current();
         } else {
           Animated.spring(swipeX, { toValue: 0, useNativeDriver: false }).start();
           setSwipeProgress(0);
@@ -67,6 +72,10 @@ export default function JoinOrderScreen() {
       },
     })
   ).current;
+
+  useEffect(() => {
+    handleConfirmRef.current = handleConfirm;
+  });
 
   async function handleConfirm() {
     if (!offer || !selectedRelay) return;
@@ -216,6 +225,11 @@ export default function JoinOrderScreen() {
                     : Colors.orange + '20',
                 },
               ]}
+              onLayout={(e) => {
+                const w = e.nativeEvent.layout.width;
+                trackWidthRef.current = w;
+                setTrackWidth(w);
+              }}
             >
               <Text style={styles.swipeHint}>
                 {swipeProgress > 0.7 ? 'Relâchez pour confirmer ✓' : 'Glissez pour payer →'}

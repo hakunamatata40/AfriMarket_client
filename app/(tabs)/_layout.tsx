@@ -59,6 +59,14 @@ export default function TabsLayout() {
         }}
       />
       <Tabs.Screen
+        name="map"
+        options={{
+          tabBarIcon: ({ focused }) => (
+            <TabIcon emoji="🗺️" label="Carte" focused={focused} />
+          ),
+        }}
+      />
+      <Tabs.Screen
         name="profile"
         options={{
           tabBarIcon: ({ focused }) => (

@@ -33,6 +33,7 @@ export async function register(data: {
   fullName: string;
   phone: string;
   password: string;
+  email?: string;
   arrondissement?: string;
 }): Promise<AuthResponse> {
   const res = await apiPost<AuthResponse>(

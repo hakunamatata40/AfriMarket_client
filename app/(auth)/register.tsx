@@ -24,6 +24,7 @@ const ARRONDISSEMENTS = [
 export default function RegisterScreen() {
   const [fullName, setFullName] = useState('');
   const [phone, setPhone] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [arrondissement, setArrondissement] = useState('');
   const [showPwd, setShowPwd] = useState(false);
@@ -39,9 +40,19 @@ export default function RegisterScreen() {
       Alert.alert('Mot de passe trop court', 'Au moins 6 caractères requis.');
       return;
     }
+    if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
+      Alert.alert('Email invalide', 'Veuillez saisir une adresse email valide.');
+      return;
+    }
     setLoading(true);
     try {
-      const res = await register({ fullName: fullName.trim(), phone: phone.trim(), password, arrondissement });
+      const res = await register({
+        fullName: fullName.trim(),
+        phone: phone.trim(),
+        password,
+        email: email.trim() || undefined,
+        arrondissement,
+      });
       setUser(res.user);
       router.replace('/(tabs)');
     } catch (e: any) {
@@ -92,6 +103,24 @@ export default function RegisterScreen() {
                 placeholderTextColor={Colors.textDim}
                 keyboardType="phone-pad"
               />
+            </View>
+
+            {/* Email */}
+            <View style={styles.field}>
+              <Text style={styles.label}>Adresse email <Text style={styles.optional}>(optionnel)</Text></Text>
+              <TextInput
+                style={styles.input}
+                value={email}
+                onChangeText={setEmail}
+                placeholder="marie@example.com"
+                placeholderTextColor={Colors.textDim}
+                keyboardType="email-address"
+                autoCapitalize="none"
+                autoComplete="email"
+              />
+              <Text style={styles.fieldHint}>
+                💡 Nécessaire pour réinitialiser votre mot de passe
+              </Text>
             </View>
 
             {/* Mot de passe */}
@@ -216,4 +245,6 @@ const styles = StyleSheet.create({
   arrPillActive: { backgroundColor: Colors.orange, borderColor: Colors.orange },
   arrPillText: { fontFamily: 'DMSans_400Regular', fontSize: 12, color: Colors.textSecondary },
   arrPillTextActive: { color: '#fff', fontFamily: 'DMSans_600SemiBold' },
+  optional: { fontFamily: 'DMSans_400Regular', fontSize: 10, color: Colors.textDim, textTransform: 'none' },
+  fieldHint: { fontFamily: 'DMSans_400Regular', fontSize: 11, color: Colors.textDim, marginTop: 6 },
 });

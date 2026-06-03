@@ -100,7 +100,12 @@ function mapOffer(raw: RawOffer, relays: Relay[] = []): Offer {
     producerRatingCount: raw.producerRatingCount ?? 0,
     producerVerified: raw.producerVerified ?? false,
     zoneName: raw.zoneName ?? 'Yaoundé',
-    photos: raw.photos ?? [],
+    photos: (() => {
+      const BASE_URL = API.OFFERS.split('/api')[0];
+      return (raw.photos ?? []).map(p =>
+        p.startsWith('http') ? p : `${BASE_URL}${p}`
+      );
+    })(),
     relays,
     expiresAt: raw.expiresAt ?? new Date(Date.now() + 7 * 86400_000).toISOString(),
     deliveryDate: raw.deliveryDate,
