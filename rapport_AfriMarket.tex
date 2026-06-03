@@ -1,0 +1,1339 @@
+% ============================================================
+%  RAPPORT DE STAGE / PROJET – AfriMarket
+%  Fichier principal : rapport_AfriMarket.tex
+%  Compilé avec : pdflatex (2 passes) puis bibtex puis 2 passes
+%  Encodage : UTF-8
+% ============================================================
+
+\documentclass[12pt, a4paper, oneside]{report}
+
+% ─── Encodage et langue ────────────────────────────────────
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+
+% ─── Mise en page ──────────────────────────────────────────
+\usepackage[
+  top=2.5cm, bottom=2.5cm,
+  left=3cm,  right=2.5cm
+]{geometry}
+\usepackage{setspace}
+\onehalfspacing                    % interligne 1.5
+
+% ─── Typographie ───────────────────────────────────────────
+\usepackage{lmodern}               % polices vectorielles
+\usepackage{microtype}             % amélioration micro-typographique
+\usepackage{csquotes}              % guillemets corrects en français
+
+% ─── Couleurs et graphiques ────────────────────────────────
+\usepackage[dvipsnames,svgnames,x11names]{xcolor}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric, arrows.meta, positioning, fit, backgrounds}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+
+% ─── Tableaux ──────────────────────────────────────────────
+\usepackage{booktabs}              % filets professionnels
+\usepackage{tabularx}              % tableaux à largeur fixe
+\usepackage{multirow}              % fusion de lignes
+\usepackage{longtable}             % tableaux multi-pages
+\usepackage{array}                 % colonnes personnalisées
+% Bordures complètes sur tous les tableaux via \hline
+\renewcommand{\arraystretch}{1.3}  % hauteur de ligne agréable
+
+% ─── Listes et numérotation ────────────────────────────────
+\usepackage{enumitem}
+\usepackage{pifont}
+
+% ─── Figures et légendes ───────────────────────────────────
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{float}                 % option [H] pour les figures
+\captionsetup{
+  labelfont=bf,
+  textfont=it,
+  justification=centering
+}
+
+% ─── Code source ───────────────────────────────────────────
+\usepackage{listings}
+\lstset{
+  basicstyle=\ttfamily\small,
+  keywordstyle=\color{NavyBlue}\bfseries,
+  commentstyle=\color{Gray}\itshape,
+  stringstyle=\color{ForestGreen},
+  numbers=left, numberstyle=\tiny\color{Gray},
+  breaklines=true,
+  frame=single, rulecolor=\color{Gray!40},
+  backgroundcolor=\color{Gray!5},
+  tabsize=2
+}
+
+% ─── Liens hypertextes ─────────────────────────────────────
+\usepackage[
+  colorlinks=true,
+  linkcolor=NavyBlue,
+  citecolor=BrickRed,
+  urlcolor=Teal,
+  bookmarks=true,
+  pdfauthor={[Votre Prénom NOM]},
+  pdftitle={Rapport de projet – AfriMarket}
+]{hyperref}
+
+% ─── Bibliographie ─────────────────────────────────────────
+\usepackage[
+  backend=bibtex,
+  style=numeric,
+  sorting=nyt
+]{biblatex}
+\addbibresource{references.bib}
+
+% ─── Abréviations (acronymes) ──────────────────────────────
+\usepackage[
+  acronym,
+  toc,
+  nonumberlist,
+  nopostdot
+]{glossaries}
+\makeglossaries
+
+% ─── En-têtes et pieds de page ─────────────────────────────
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\leftmark}
+\fancyhead[R]{\small AfriMarket}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+% ─── Numérotation des sections dans le sommaire ────────────
+\setcounter{tocdepth}{3}
+\setcounter{secnumdepth}{3}
+
+% ─── Formatage des chapitres ───────────────────────────────
+\usepackage{titlesec}
+\titleformat{\chapter}[block]
+  {\normalfont\Large\bfseries\color{NavyBlue}}
+  {\thechapter.}{1em}{}
+  [\vspace{0.2em}\titlerule]
+
+% ─── Commandes utiles ──────────────────────────────────────
+\newcommand{\TODO}[1]{\textcolor{red}{\textbf{[TODO: #1]}}}
+% Commande pour mettre en avant un terme technique
+\newcommand{\tech}[1]{\texttt{#1}}
+
+% ============================================================
+%  DÉFINITION DES ACRONYMES
+% ============================================================
+\newacronym{api}{API}{Application Programming Interface}
+\newacronym{rest}{REST}{Representational State Transfer}
+\newacronym{jwt}{JWT}{JSON Web Token}
+\newacronym{ui}{UI}{User Interface}
+\newacronym{ux}{UX}{User Experience}
+\newacronym{mvvm}{MVVM}{Model-View-ViewModel}
+\newacronym{p2p}{P2P}{Peer-to-Peer}
+\newacronym{crud}{CRUD}{Create Read Update Delete}
+\newacronym{jpa}{JPA}{Jakarta Persistence API}
+\newacronym{sql}{SQL}{Structured Query Language}
+\newacronym{momo}{MoMo}{Mobile Money}
+\newacronym{json}{JSON}{JavaScript Object Notation}
+\newacronym{spa}{SPA}{Single Page Application}
+\newacronym{tsx}{TSX}{TypeScript XML}
+\newacronym{orm}{ORM}{Object-Relational Mapping}
+\newacronym{http}{HTTP}{HyperText Transfer Protocol}
+\newacronym{fcfa}{FCFA}{Franc CFA}
+\newacronym{uml}{UML}{Unified Modeling Language}
+
+% ============================================================
+%  DÉBUT DU DOCUMENT
+% ============================================================
+\begin{document}
+
+% ─── Page de titre ─────────────────────────────────────────
+\begin{titlepage}
+  \centering
+  % Logos côte à côte : UIGEE à gauche, Keyce à droite
+  % Remplacez les chemins par vos fichiers réels
+  \begin{minipage}[c]{0.35\textwidth}
+    \centering
+    \fbox{\rule{0pt}{1.5cm}\rule{3cm}{0pt}}\\[2pt]
+    % \includegraphics[width=3cm]{logos/uigee.png}  % ← décommenter + placer logo
+    {\small UIGEE}
+  \end{minipage}
+  \hfill
+  \begin{minipage}[c]{0.35\textwidth}
+    \centering
+    \fbox{\rule{0pt}{1.5cm}\rule{3cm}{0pt}}\\[2pt]
+    % \includegraphics[width=3cm]{logos/keyce.png}  % ← décommenter + placer logo
+    {\small Keyce Informatique \& IA}
+  \end{minipage}
+
+  \vspace{1.5cm}
+  {\small Université / Institut de l'Ingénierie et des Grandes Écoles}\\[0.3cm]
+  {\small En partenariat avec Keyce Informatique \& IA}
+
+  \vspace{1cm}
+  \rule{\linewidth}{1pt}\\[0.4cm]
+  {\LARGE\bfseries\color{NavyBlue}
+    Rapport de Projet de Développement\\[0.3cm]
+    Application Mobile \textit{AfriMarket}\\[0.2cm]
+    Marketplace Agricole P2P pour l'Afrique Centrale
+  }\\[0.3cm]
+  \rule{\linewidth}{1pt}
+
+  \vspace{1cm}
+  {\large Présenté par :}\\[0.4cm]
+  {\Large\bfseries [Votre Prénom NOM]}\\[0.2cm]
+  {\large Matricule : \textbf{[XXXX-XXXXXX]}}
+
+  \vspace{1cm}
+  \begin{tabular}{ll}
+    \textbf{Filière :}       & Développement Mobile / Génie Logiciel \\[4pt]
+    \textbf{Niveau :}        & [Licence / Master] \\[4pt]
+    \textbf{Encadreur :}     & [Nom de l'encadreur] \\[4pt]
+    \textbf{Année académique :} & 2024 -- 2025 \\
+  \end{tabular}
+
+  \vfill
+  {\small Soutenu le \textbf{[JJ Mois AAAA]} devant le jury composé de :}\\[0.3cm]
+  \begin{tabular}{ll}
+    Président  & [Nom] \\
+    Rapporteur & [Nom] \\
+    Examinateur & [Nom] \\
+  \end{tabular}
+\end{titlepage}
+
+% ─── Pages liminaires : numérotation romaine ───────────────
+\pagenumbering{roman}
+\setcounter{page}{1}
+
+% ============================================================
+%  REMERCIEMENTS
+% ============================================================
+\chapter*{Remerciements}
+\addcontentsline{toc}{chapter}{Remerciements}
+
+Nous adressons en premier lieu nos plus sincères remerciements aux membres du jury qui ont
+bien voulu consacrer de leur précieux temps à l'évaluation de ce travail. Leurs remarques
+constructives contribueront à l'amélioration de nos pratiques professionnelles.
+
+Nos remerciements vont ensuite à \textbf{[Nom du professeur encadreur]}, enseignant
+référent, dont la disponibilité, les orientations pédagogiques et les conseils avisés ont
+guidé chaque étape de ce projet. Sa rigueur académique nous a permis d'aborder les
+difficultés techniques avec méthode.
+
+Nous exprimons également notre gratitude à l'ensemble des tuteurs et maîtres de stage qui
+ont suivi l'évolution de ce travail au quotidien, pour leur patience et la transmission
+de leur expérience professionnelle.
+
+Enfin, nous remercions les membres de l'administration de l'UIGEE et de Keyce Informatique
+\& IA pour leur soutien institutionnel et les conditions d'étude qu'ils ont su créer.
+
+% ============================================================
+%  RÉSUMÉ (français)
+% ============================================================
+\chapter*{Résumé}
+\addcontentsline{toc}{chapter}{Résumé}
+
+AfriMarket est une application mobile de type marketplace agricole pair-à-pair conçue pour
+le contexte camerounais et, plus largement, pour l'Afrique centrale francophone. Elle met
+en relation directe des producteurs agricoles avec des consommateurs urbains, en s'appuyant
+sur un réseau de points relais pour la logistique de livraison et sur le Mobile Money pour
+les paiements. Le projet comprend trois composantes logicielles : une application
+\emph{consommateur} (AfriMarket Client), une application \emph{producteur} (AfriMarket
+Producteur) et une interface d'administration web, toutes alimentées par un serveur backend
+RESTful.
+
+Ce rapport décrit le processus complet qui a conduit de l'identification du problème de
+distribution agricole en milieu urbain jusqu'à la livraison d'une solution fonctionnelle.
+Après une analyse de l'état de l'art des plateformes agri-tech existantes, nous exposons
+les choix de conception, l'architecture logicielle retenue et la mise en œuvre technique,
+avant de présenter les résultats obtenus et les perspectives d'amélioration.
+
+\vspace{1em}
+\noindent\textbf{Mots-clés :} application mobile, marketplace agricole, React Native,
+Spring Boot, Mobile Money, Cameroun, pair-à-pair, logistique, \gls{rest}.
+
+% ============================================================
+%  ABSTRACT (anglais)
+% ============================================================
+\chapter*{Abstract}
+\addcontentsline{toc}{chapter}{Abstract}
+
+AfriMarket is a peer-to-peer agricultural marketplace mobile application designed for the
+Cameroonian context and, more broadly, for French-speaking Central Africa. It directly
+connects agricultural producers with urban consumers through a relay-point delivery network
+and Mobile Money payments. The project consists of three software components: a
+\emph{consumer} application (AfriMarket Client), a \emph{producer} application (AfriMarket
+Producteur), and a web-based administration interface, all powered by a RESTful backend
+server.
+
+This report describes the complete process from the identification of the agricultural
+distribution problem in urban areas to the delivery of a functional solution. After an
+analysis of the state of the art in existing agri-tech platforms, we present the design
+choices, software architecture, and technical implementation, before discussing results and
+future improvements.
+
+\vspace{1em}
+\noindent\textbf{Keywords:} mobile application, agricultural marketplace, React Native,
+Spring Boot, Mobile Money, Cameroon, peer-to-peer, logistics, REST.
+
+% ============================================================
+%  LISTE DES FIGURES (auto)
+% ============================================================
+\listoffigures
+\addcontentsline{toc}{chapter}{Liste des figures}
+
+% ============================================================
+%  LISTE DES TABLEAUX (auto)
+% ============================================================
+\listoftables
+\addcontentsline{toc}{chapter}{Liste des tableaux}
+
+% ============================================================
+%  ABRÉVIATIONS (auto via glossaries)
+% ============================================================
+\printglossary[type=\acronymtype, title={Liste des Abréviations}]
+\addcontentsline{toc}{chapter}{Liste des Abréviations}
+
+% ============================================================
+%  GLOSSAIRE
+% ============================================================
+\chapter*{Glossaire}
+\addcontentsline{toc}{chapter}{Glossaire}
+
+\begin{description}[leftmargin=3.5cm, style=nextline]
+  \item[Marketplace]
+    Plateforme numérique mettant en relation des offreurs et des demandeurs de biens ou
+    de services sans que la plateforme ne soit elle-même propriétaire des biens.
+  \item[Mobile Money]
+    Service financier permettant d'effectuer des paiements, transferts et retraits d'argent
+    via un téléphone mobile, très répandu en Afrique subsaharienne
+    (Orange Money, MTN MoMo, etc.).
+  \item[Point relais]
+    Lieu physique tiers (boutique, dépôt) servant d'intermédiaire de livraison entre le
+    producteur et le consommateur, évitant ainsi la livraison à domicile.
+  \item[Offre groupée]
+    Mécanisme par lequel un producteur ne lance la production ou la livraison que si la
+    quantité minimale commandée est atteinte par l'ensemble des acheteurs.
+  \item[Wallet virtuel]
+    Portefeuille électronique interne à l'application, créédité lors du paiement d'une
+    commande et débitable vers le compte Mobile Money du producteur.
+  \item[Token JWT]
+    Jeton numérique signé permettant d'authentifier un utilisateur auprès de l'API sans
+    stocker d'état côté serveur.
+  \item[Expo / Expo Router]
+    Framework JavaScript facilitant le développement d'applications React Native
+    multi-plateformes (iOS, Android, Web) avec un système de routage par fichiers.
+  \item[Spring Boot]
+    Framework Java permettant de créer des applications web autonomes avec un minimum
+    de configuration.
+\end{description}
+
+% ============================================================
+%  TABLE DES MATIÈRES
+% ============================================================
+\tableofcontents
+
+% ─── Corps du document : numérotation arabe ────────────────
+\pagenumbering{arabic}
+\setcounter{page}{1}
+
+% ============================================================
+%  CHAPITRE 1 – INTRODUCTION GÉNÉRALE
+% ============================================================
+\chapter{Introduction générale}
+\markboth{Chapitre 1 -- Introduction générale}{}
+
+Le développement de l'économie numérique en Afrique subsaharienne connaît une croissance
+soutenue portée par la progression rapide de la téléphonie mobile et des infrastructures
+Internet. Dans ce contexte, le secteur agricole, qui représente une part significative du
+\gls{pib} de nombreux pays d'Afrique centrale, reste paradoxalement l'un des moins
+numérisés. Les agriculteurs manquent d'outils adaptés pour valoriser leur production et
+rejoindre efficacement les marchés urbains, tandis que les consommateurs souffrent d'une
+opacité persistante sur la provenance et la qualité des denrées alimentaires.
+
+Ce projet s'inscrit dans cette dynamique de transformation numérique de l'agriculture en
+proposant AfriMarket, une plateforme mobile pair-à-pair dédiée à la mise en relation
+directe de producteurs agricoles et de consommateurs au Cameroun. L'idée centrale est
+d'éliminer les intermédiaires traditionnels souvent à l'origine des marges excessives et
+des pertes post-récolte, tout en s'appuyant sur des points relais locaux pour gérer la
+logistique de livraison et sur le Mobile Money pour sécuriser les paiements.
+
+La problématique centrale de ce travail peut se formuler ainsi : comment concevoir et
+développer une application mobile qui s'adapte aux contraintes spécifiques du marché
+camerounais — connectivité intermittente, prédominance du paiement mobile, faible culture
+numérique de certains producteurs — tout en offrant une expérience utilisateur fluide et
+sécurisée à l'ensemble des acteurs de la chaîne ? Cette question en recouvre plusieurs
+autres : comment modéliser un système d'offres groupées permettant aux producteurs de ne
+livrer que lorsqu'un seuil minimal de commandes est atteint ? Comment orchestrer le cycle
+de vie d'une commande entre les rôles de producteur, de consommateur, de gestionnaire de
+point relais et d'administrateur ? Comment intégrer un portefeuille virtuel interne tout
+en prévoyant les passerelles vers les opérateurs de Mobile Money ?
+
+La motivation principale de ce projet naît d'un constat terrain : au marché central de
+Yaoundé comme dans les marchés de quartier, les agriculteurs des zones péri-urbaines
+vendent souvent leur production à des prix très inférieurs à ceux affichés en ville, faute
+de moyens logistiques et de visibilité. AfriMarket vise à corriger cette asymétrie en
+dotant les producteurs d'un outil de gestion d'offres accessible depuis un simple
+smartphone et en permettant aux consommateurs de s'organiser collectivement pour atteindre
+les seuils d'achat. Au-delà de l'enjeu économique, le projet répond à une ambition sociale :
+renforcer la souveraineté alimentaire locale et valoriser le travail agricole.
+
+Les objectifs de ce projet sont multiples et structurés en niveaux de priorité.
+L'objectif principal est de livrer une application mobile fonctionnelle comprenant trois
+interfaces distinctes — consommateur, producteur et administration — reliées à un backend
+\gls{rest} unifié. Les objectifs secondaires incluent la mise en place d'un système
+d'offres groupées avec progression visible en temps réel, l'intégration d'un wallet
+virtuel avec mécanisme de retrait vers Mobile Money, la gestion d'un réseau de points
+relais et la sécurisation des échanges par authentification \gls{jwt}.
+
+Ce rapport est organisé en trois chapitres principaux. Le premier chapitre — cette
+introduction — pose le contexte, la problématique, les motivations et les objectifs du
+projet. Le deuxième chapitre explore les concepts fondamentaux mobilisés et dresse un
+état de l'art des solutions existantes. Le troisième chapitre détaille la méthodologie
+suivie : analyse des besoins, conception et architecture. Le quatrième chapitre présente
+les choix technologiques et les résultats obtenus à travers des captures d'écran et une
+description des fonctionnalités livrées.
+
+% ============================================================
+%  CHAPITRE 2 – CONCEPTS ET ÉTAT DE L'ART
+% ============================================================
+\chapter{Concepts et état de l'art}
+\markboth{Chapitre 2 -- Concepts et état de l'art}{}
+
+% ─── 2.1 Concepts fondamentaux ─────────────────────────────
+\section{Concepts fondamentaux}
+
+La compréhension d'AfriMarket nécessite la maîtrise de plusieurs concepts transversaux
+issus du commerce électronique, de la logistique et du développement mobile.
+
+\subsection{La marketplace pair-à-pair (\glsentryshort{p2p})}
+
+Une marketplace \gls{p2p} est une plateforme numérique qui facilite des transactions
+directes entre particuliers ou entre petits producteurs et consommateurs, sans que
+l'opérateur de la plateforme ne soit propriétaire des biens échangés. Contrairement aux
+places de marché B2C classiques (Business-to-Consumer), le modèle \gls{p2p} repose sur la
+confiance entre pairs, renforcée par des mécanismes de notation, de vérification d'identité
+et d'escrow (séquestre des fonds). Airbnb et Uber en sont les exemples emblématiques ;
+dans le secteur agricole, des plateformes comme Twiga Foods au Kenya ou Hello Tractor en
+Afrique de l'Ouest illustrent le potentiel de ce modèle pour le continent africain
+\cite{twiga2023}.
+
+\subsection{Les offres groupées (group buying)}
+
+Le mécanisme d'offre groupée, popularisé par Groupon à l'international, consiste à
+conditionner l'activation d'une offre commerciale à l'atteinte d'un seuil minimal de
+participants. Dans le contexte agricole, ce mécanisme présente un double avantage : il
+garantit au producteur une taille critique de commande qui justifie le déplacement ou la
+récolte spécifique, et il permet aux consommateurs de bénéficier de prix de gros tout en
+achetant en quantité raisonnable. AfriMarket adapte ce concept en affichant un indicateur
+de progression en temps réel (pourcentage de la quantité minimale atteinte), ce qui crée
+une dynamique sociale d'entraînement entre les acheteurs.
+
+\subsection{Le Mobile Money en Afrique centrale}
+
+Le Mobile Money désigne un service financier permettant d'effectuer des transactions
+monétaires via un téléphone mobile, sans nécessiter de compte bancaire traditionnel. En
+Afrique subsaharienne, deux opérateurs dominent le marché camerounais : MTN Mobile Money
+(MoMo) et Orange Money. Avec un taux de bancarisation inférieur à 20\% au Cameroun
+\cite{banquemondiale2023}, le Mobile Money représente le principal vecteur de paiement
+numérique pour une large part de la population, y compris les agriculteurs. L'intégration
+de ces services dans AfriMarket est donc non seulement souhaitable mais indispensable pour
+l'adoption de la plateforme.
+
+\subsection{Le réseau de points relais}
+
+Un point relais est un établissement commercial partenaire (kiosque, boutique, dépôt)
+servant d'intermédiaire entre le producteur et le consommateur pour la remise des
+commandes. Ce modèle logistique, bien établi en Europe (Mondial Relay, Chronopost), se
+révèle particulièrement adapté aux villes africaines où l'adressage postal est souvent
+imprécis et où la livraison à domicile génère des coûts importants. AfriMarket intègre un
+réseau de points relais géo-référencés, associés à des zones géographiques calquées sur les
+arrondissements de Yaoundé.
+
+\subsection{L'architecture RESTful et les microservices}
+
+L'\gls{api} \gls{rest} constitue le style architectural dominant pour les backend
+d'applications mobiles. Elle repose sur le protocole \gls{http} et organise les ressources
+autour de verbes sémantiques (GET, POST, PUT, DELETE). Dans AfriMarket, cette architecture
+permet de découpler complètement les trois interfaces clientes (consommateur, producteur,
+admin) du backend, offrant une flexibilité maximale pour l'évolution indépendante de
+chaque composante \cite{fielding2000}.
+
+\subsection{La sécurité par JSON Web Token}
+
+Le \gls{jwt} est un standard ouvert (RFC 7519) définissant une manière compacte et
+auto-portée de transmettre des informations entre parties sous forme d'objet \gls{json}
+signé numériquement. Dans le contexte d'une \gls{api} \gls{rest} sans état (stateless),
+le \gls{jwt} remplace avantageusement la session serveur traditionnelle : le token, émis
+lors de la connexion et stocké côté client, est joint à chaque requête et vérifié par le
+serveur sans consultation d'une base de données de session \cite{jones2015}.
+
+% ─── 2.2 État de l'art ─────────────────────────────────────
+\section{État de l'art des solutions existantes}
+
+\subsection{Plateformes agricoles africaines}
+
+Plusieurs initiatives numériques tentent de résoudre le problème de mise en marché des
+productions agricoles en Afrique. Twiga Foods (Kenya) propose un modèle B2B qui achète les
+productions directement aux agriculteurs pour les revendre aux épiceries urbaines. Hello
+Tractor (Nigeria) se concentre sur la location de matériel agricole. Esoko (Ghana) fournit
+des informations de prix de marché par SMS. En Afrique centrale, les solutions spécifiques
+au Cameroun restent rares et rarement adaptées aux spécificités linguistiques et
+logistiques locales.
+
+\begin{table}[H]
+  \centering
+  \caption{Comparaison des plateformes agri-tech existantes}
+  \label{tab:comparaison_plateformes}
+  \begin{tabular}{|l|l|l|l|l|}
+    \hline
+    \textbf{Plateforme} & \textbf{Pays} & \textbf{Modèle} & \textbf{Paiement} & \textbf{Livraison} \\
+    \hline
+    Twiga Foods   & Kenya     & B2B       & Mobile Money & Propre fleet \\
+    \hline
+    Hello Tractor & Nigeria   & Location  & Carte/Mobile & Non concerné \\
+    \hline
+    Esoko         & Ghana     & Info prix & -- & -- \\
+    \hline
+    Jumia Food    & Multi     & B2C resto & Mobile/Carte & Coursiers \\
+    \hline
+    \textbf{AfriMarket} & \textbf{Cameroun} & \textbf{P2P} & \textbf{MoMo} & \textbf{Points relais} \\
+    \hline
+  \end{tabular}
+\end{table}
+
+\subsection{Frameworks de développement mobile}
+
+Le choix d'un framework de développement mobile est crucial car il détermine la
+maintenance, les performances et la capacité à cibler plusieurs plateformes simultanément.
+Trois approches coexistent : le développement natif (Swift/Kotlin), le développement
+hybride (Ionic/Cordova) et le développement cross-platform (Flutter, React Native).
+React Native, soutenu par Meta, se distingue par son utilisation de JavaScript/TypeScript,
+sa large communauté et son écosystème Expo qui simplifie considérablement le processus de
+build et de déploiement \cite{eisenman2015}. Il s'impose comme le choix naturel dans un
+contexte académique où la réutilisation des compétences web JavaScript est un avantage.
+
+\subsection{Frameworks backend pour les API mobiles}
+
+Spring Boot, maintenu par VMware Pivotal, est le framework Java le plus utilisé en
+entreprise pour construire des API RESTful. Sa convention-over-configuration, sa gestion
+intégrée de la sécurité via Spring Security, et son écosystème JPA/Hibernate pour la
+persistance des données en font un choix robuste et éprouvé. La version 3.x, basée sur
+Jakarta EE, apporte des améliorations significatives en termes de performances et de
+support des architectures réactives \cite{springboot2024}.
+
+% ─── 2.3 Bilan ─────────────────────────────────────────────
+\section{Bilan}
+
+L'analyse de l'existant révèle un écosystème agri-tech africain encore fragmenté, dominé
+par des solutions B2B ou des services d'information incomplets. Aucune plateforme ne
+propose simultanément les offres groupées, le réseau de points relais géolocalisés, le
+wallet virtuel et l'interface tripartite (producteur / consommateur / admin) adaptée au
+marché camerounais. AfriMarket comble ce vide en s'appuyant sur des technologies modernes
+(React Native avec Expo, Spring Boot 4) et en intégrant nativement les contraintes locales
+(Mobile Money, gestion par zones, mode hors-ligne partiel). Ce positionnement justifie
+pleinement le développement d'une solution sur mesure plutôt que l'adaptation d'une
+solution existante.
+
+% ============================================================
+%  CHAPITRE 3 – MÉTHODOLOGIE
+% ============================================================
+\chapter{Méthodologie}
+\markboth{Chapitre 3 -- Méthodologie}{}
+
+% ─── 3.1 Analyse des besoins ───────────────────────────────
+\section{Analyse des besoins}
+
+\subsection{Besoins fonctionnels}
+
+Les besoins fonctionnels ont été identifiés en interrogeant les utilisateurs cibles et en
+analysant les processus actuels de vente agricole. Ils ont été organisés autour des
+cinq acteurs principaux du système.
+
+\subsubsection{Consommateur}
+
+Le consommateur doit pouvoir s'inscrire et se connecter via son numéro de téléphone, parcourir
+et filtrer les offres actives par catégorie (légumes, fruits, tubercules, céréales,
+élevage) et par zone géographique, visualiser la progression d'une offre groupée, rejoindre
+une offre en spécifiant la quantité souhaitée, payer via Mobile Money, sélectionner un
+point relais pour la livraison, confirmer la réception de sa commande et ouvrir un litige
+en cas de problème.
+
+\subsubsection{Producteur}
+
+Le producteur doit pouvoir créer une offre avec titre, description, catégorie, unité, prix
+unitaire, quantité disponible, seuil minimal et date d'expiration, téléverser des photos de
+sa production, soumettre l'offre à validation administrative, suivre en temps réel les
+commandes reçues, confirmer l'expédition vers les relais, gérer son portefeuille virtuel
+et demander un retrait vers son compte Mobile Money.
+
+\subsubsection{Gestionnaire de point relais}
+
+Le gestionnaire de point relais doit recevoir les notifications de dépôt, signaler la
+réception des colis et confirmer les remises aux consommateurs.
+
+\subsubsection{Administrateur}
+
+L'administrateur doit valider ou rejeter les offres et les profils de producteurs, accéder
+à un tableau de bord avec les indicateurs clés (chiffre d'affaires, commandes, utilisateurs),
+gérer les zones, les points relais, les utilisateurs et les paramètres système.
+
+\subsubsection{Finance}
+
+L'opérateur finance doit visualiser l'ensemble des transactions, déclencher les virements
+Mobile Money aux producteurs et gérer les remboursements en cas de litige.
+
+\begin{table}[H]
+  \centering
+  \caption{Matrice des besoins fonctionnels par acteur}
+  \label{tab:besoins_fonctionnels}
+  \begin{tabularx}{\textwidth}{|l|X|c|}
+    \hline
+    \textbf{Acteur} & \textbf{Besoin fonctionnel principal} & \textbf{Priorité} \\
+    \hline
+    Consommateur & Parcourir et rejoindre des offres & Haute \\
+    \hline
+    Consommateur & Payer via Mobile Money & Haute \\
+    \hline
+    Consommateur & Confirmer la réception / ouvrir litige & Moyenne \\
+    \hline
+    Producteur & Créer et publier une offre groupée & Haute \\
+    \hline
+    Producteur & Gérer son wallet virtuel & Haute \\
+    \hline
+    Producteur & Retirer ses gains vers MoMo & Haute \\
+    \hline
+    Relais & Confirmer dépôt et remise & Moyenne \\
+    \hline
+    Admin & Valider/Rejeter les offres & Haute \\
+    \hline
+    Admin & Tableau de bord analytique & Moyenne \\
+    \hline
+    Finance & Gérer les transactions et virements & Haute \\
+    \hline
+  \end{tabularx}
+\end{table}
+
+\subsection{Besoins non fonctionnels}
+
+Les besoins non fonctionnels définissent les contraintes qualitatives que doit respecter
+le système indépendamment de ses fonctionnalités métier.
+
+\begin{table}[H]
+  \centering
+  \caption{Besoins non fonctionnels du système AfriMarket}
+  \label{tab:besoins_non_fonctionnels}
+  \begin{tabularx}{\textwidth}{|l|X|X|}
+    \hline
+    \textbf{Catégorie} & \textbf{Exigence} & \textbf{Indicateur de mesure} \\
+    \hline
+    Performance & Temps de réponse de l'API inférieur à 500 ms & Mesure avec Postman / JMeter \\
+    \hline
+    Disponibilité & Uptime du backend supérieur à 99\% & Monitoring uptime \\
+    \hline
+    Sécurité & Authentification par \gls{jwt} & Rotation du token toutes les 24h \\
+    \hline
+    Sécurité & Chiffrement des mots de passe (BCrypt) & Audit du code SecurityConfig \\
+    \hline
+    Scalabilité & Architecture stateless permettant la mise à l'échelle horizontale & Containerisation Docker \\
+    \hline
+    Utilisabilité & Interface utilisable sans formation préalable & Tests utilisateurs \\
+    \hline
+    Maintenabilité & Code couvert à 60\% par des tests unitaires & Rapport JaCoCo \\
+    \hline
+    Compatibilité & Support Android 8+ et iOS 14+ & Tests sur émulateurs \\
+    \hline
+    Hors-ligne & Affichage des offres récentes sans connexion & Mode dégradé avec cache local \\
+    \hline
+  \end{tabularx}
+\end{table}
+
+% ─── 3.2 Conception ────────────────────────────────────────
+\section{Conception}
+
+\subsection{Modèle conceptuel des données}
+
+Le modèle de données d'AfriMarket s'articule autour de neuf entités principales. L'entité
+\texttt{User} centralise les informations de tous les acteurs (consommateurs, producteurs,
+gestionnaires de relais, administrateurs, agents financiers) grâce à un champ
+\texttt{role} de type énuméré. L'entité \texttt{Offer} modélise une offre groupée avec
+ses seuils, son statut et ses photos associées. L'entité \texttt{Order} représente la
+participation d'un consommateur à une offre, avec capture du prix au moment de l'achat.
+Les entités \texttt{Transaction} et \texttt{Wallet} (virtuel) gèrent les flux financiers
+internes. L'entité \texttt{RelayPoint} regroupe les points relais géoréférencés associés
+à des \texttt{Zone}. Enfin, les entités \texttt{Rating} et \texttt{Dispute} couvrent les
+mécanismes de réputation et de résolution des litiges.
+
+% Diagramme entité-relation simplifié en TikZ
+\begin{figure}[H]
+  \centering
+  \begin{tikzpicture}[
+      entity/.style={rectangle, draw=NavyBlue, thick, fill=NavyBlue!10,
+                     rounded corners=2pt, minimum width=2.4cm, minimum height=0.8cm,
+                     font=\small\bfseries},
+      rel/.style={diamond, draw=BrickRed, fill=BrickRed!10, thick,
+                  aspect=2, font=\scriptsize},
+      line/.style={draw, thick, -{Latex}}
+  ]
+    % Entités
+    \node[entity] (user)    at (0,0)      {User};
+    \node[entity] (offer)   at (4,0)      {Offer};
+    \node[entity] (order)   at (4,-3)     {Order};
+    \node[entity] (tx)      at (8,-3)     {Transaction};
+    \node[entity] (relay)   at (8,0)      {RelayPoint};
+    \node[entity] (zone)    at (8,2.5)    {Zone};
+    \node[entity] (photo)   at (4,2.5)    {OfferPhoto};
+    \node[entity] (dispute) at (0,-3)     {Dispute};
+    \node[entity] (rating)  at (0,-5)     {Rating};
+
+    % Relations
+    \draw[line] (user)    -- node[above,font=\scriptsize]{1} (offer)
+                           node[midway,above,font=\scriptsize]{produit\ *};
+    \draw[line] (user)    -- node[left,font=\scriptsize]{1} (order)
+                           node[midway,left,font=\scriptsize]{passe\ *} (order);
+    \draw[line] (offer)   -- node[right,font=\scriptsize]{1} (order)
+                           node[midway,right,font=\scriptsize]{*};
+    \draw[line] (order)   -- node[above,font=\scriptsize]{0..1} (tx)
+                           node[midway,above,font=\scriptsize]{*};
+    \draw[line] (relay)   -- (zone);
+    \draw[line] (offer)   -- (photo);
+    \draw[line] (order)   -- (relay);
+    \draw[line] (order)   -- (dispute);
+    \draw[line] (user)    -- (rating);
+  \end{tikzpicture}
+  \caption{Diagramme entité-association simplifié d'AfriMarket}
+  \label{fig:erd}
+\end{figure}
+
+\subsection{Diagramme des cas d'utilisation}
+
+Le diagramme de cas d'utilisation ci-dessous représente les interactions entre les cinq
+acteurs principaux et les grandes fonctions du système.
+
+\begin{figure}[H]
+  \centering
+  \begin{tikzpicture}[
+      actor/.style={font=\small, text centered, text width=1.5cm},
+      usecase/.style={ellipse, draw=NavyBlue, fill=NavyBlue!8, thick,
+                      font=\scriptsize, text width=2.2cm, text centered,
+                      minimum height=0.9cm},
+      boundary/.style={rectangle, draw=gray, dashed, thick, rounded corners,
+                       inner sep=10pt}
+  ]
+    % Acteurs (gauche)
+    \node[actor] (consommateur) at (-5, 0) {
+      \tikz\draw[fill=black] (0,0.4) circle (0.15cm);
+      \tikz\draw[thick] (0,0) -- (0,-0.7) (-0.3,-0.3) -- (0.3,-0.3) (0,-0.7)--(-0.2,-1.1) (0,-0.7)--(0.2,-1.1);
+      \\Consommateur};
+    \node[actor] (producteur)   at (-5,-4) {
+      \tikz\draw[fill=black] (0,0.4) circle (0.15cm);\\Producteur};
+    \node[actor] (admin)        at (-5,-8) {
+      \tikz\draw[fill=black] (0,0.4) circle (0.15cm);\\Admin};
+    \node[actor] (finance)      at (7, -2) {
+      \tikz\draw[fill=black] (0,0.4) circle (0.15cm);\\Finance};
+    \node[actor] (relay)        at (7, -6) {
+      \tikz\draw[fill=black] (0,0.4) circle (0.15cm);\\Relais};
+
+    % Cas d'utilisation
+    \node[usecase] (browsing)   at (0, 1)   {Parcourir les offres};
+    \node[usecase] (join)       at (0,-1)   {Rejoindre une offre};
+    \node[usecase] (pay)        at (0,-3)   {Payer (MoMo)};
+    \node[usecase] (confirm)    at (0,-5)   {Confirmer réception};
+    \node[usecase] (create)     at (3, 1)   {Créer offre};
+    \node[usecase] (wallet)     at (3,-1)   {Gérer wallet};
+    \node[usecase] (validate)   at (3,-5)   {Valider offres};
+    \node[usecase] (dashboard)  at (3,-7)   {Tableau de bord};
+    \node[usecase] (txmgmt)     at (5.5,-2) {Gérer transactions};
+
+    % Liaisons consommateur
+    \draw[thin] (consommateur) -- (browsing);
+    \draw[thin] (consommateur) -- (join);
+    \draw[thin] (consommateur) -- (pay);
+    \draw[thin] (consommateur) -- (confirm);
+    % Liaisons producteur
+    \draw[thin] (producteur)   -- (create);
+    \draw[thin] (producteur)   -- (wallet);
+    % Liaisons admin
+    \draw[thin] (admin)        -- (validate);
+    \draw[thin] (admin)        -- (dashboard);
+    % Liaisons finance
+    \draw[thin] (finance)      -- (txmgmt);
+    \draw[thin] (finance)      -- (wallet);
+    % Liaisons relais
+    \draw[thin] (relay)        -- (confirm);
+  \end{tikzpicture}
+  \caption{Diagramme des cas d'utilisation d'AfriMarket}
+  \label{fig:usecase}
+\end{figure}
+
+\subsection{Cycle de vie d'une offre et d'une commande}
+
+Le cycle de vie d'une offre dans AfriMarket suit une séquence d'états précisément
+définis. Une offre débute à l'état \textit{DRAFT} lors de sa création par le producteur,
+puis passe à \textit{PENDING} après sa soumission à validation. L'administrateur la valide
+(\textit{ACTIVE}) ou la rejette (\textit{REJECTED}). Une offre active collecte des
+commandes jusqu'à atteindre son seuil minimal (\textit{THRESHOLD\_REACHED}), après quoi
+la livraison est confirmée (\textit{DELIVERING}), puis l'offre est clôturée
+(\textit{COMPLETED}) ou annulée (\textit{CANCELLED}) si le seuil n'est pas atteint avant
+expiration.
+
+\begin{figure}[H]
+  \centering
+  \begin{tikzpicture}[
+      state/.style={rectangle, draw=NavyBlue, fill=NavyBlue!10, rounded corners=4pt,
+                    thick, minimum width=2.8cm, minimum height=0.7cm, font=\small},
+      arrow/.style={-{Latex}, thick, NavyBlue},
+      label/.style={font=\scriptsize, fill=white, inner sep=1pt}
+  ]
+    \node[state] (draft)     at (0,0)      {DRAFT};
+    \node[state] (pending)   at (3.5,0)    {PENDING};
+    \node[state] (active)    at (7,0)      {ACTIVE};
+    \node[state] (threshold) at (7,-2)     {THRESHOLD\_REACHED};
+    \node[state] (delivering)at (7,-4)     {DELIVERING};
+    \node[state] (completed) at (3.5,-4)   {COMPLETED};
+    \node[state] (cancelled) at (0,-4)     {CANCELLED};
+    \node[state,draw=BrickRed,fill=BrickRed!10] (rejected) at (3.5,-2) {REJECTED};
+
+    \draw[arrow] (draft)     -- node[label,above]{submit} (pending);
+    \draw[arrow] (pending)   -- node[label,above]{approve} (active);
+    \draw[arrow] (pending)   -- node[label,right]{reject} (rejected);
+    \draw[arrow] (active)    -- node[label,right]{seuil atteint} (threshold);
+    \draw[arrow] (active)    -- node[label,below,pos=0.3]{expire} (cancelled);
+    \draw[arrow] (threshold) -- node[label,right]{livraison} (delivering);
+    \draw[arrow] (delivering)-- node[label,above]{complet} (completed);
+    \draw[arrow] (active)    to[bend left=20] node[label,above]{annuler} (cancelled);
+  \end{tikzpicture}
+  \caption{Cycle de vie d'une offre dans AfriMarket}
+  \label{fig:offer_lifecycle}
+\end{figure}
+
+% ─── 3.3 Architecture ──────────────────────────────────────
+\section{Architecture du système}
+
+L'architecture d'AfriMarket suit un schéma en couches (layered architecture) côté backend
+et un pattern \gls{mvvm} côté applications mobiles.
+
+\subsection{Architecture globale}
+
+Le backend Spring Boot est organisé en quatre couches distinctes : la couche
+\textit{Controller} expose les endpoints \gls{rest} et prend en charge la validation des
+entrées ; la couche \textit{Service} contient la logique métier ; la couche
+\textit{Repository} abstrait l'accès aux données via Spring Data \gls{jpa} ; enfin, la
+couche \textit{Model} définit les entités persistées dans la base de données SQLite via
+l'\gls{orm} Hibernate.
+
+\begin{figure}[H]
+  \centering
+  \begin{tikzpicture}[
+      app/.style={rectangle, draw=Teal, fill=Teal!10, thick,
+                  rounded corners, minimum width=2.5cm, minimum height=1cm, font=\small},
+      layer/.style={rectangle, draw=NavyBlue, fill=NavyBlue!8, thick,
+                    minimum width=8cm, minimum height=0.8cm, font=\small\bfseries},
+      arrow/.style={-{Latex}, thick}
+  ]
+    % Applications mobiles
+    \node[app] (client) at (-4.5, 3.5) {AfriMarket\\Client};
+    \node[app] (prod)   at (-1.5, 3.5) {AfriMarket\\Producteur};
+    \node[app] (admin)  at (1.5,  3.5) {Interface\\Admin (Web)};
+
+    % Backend layers
+    \node[layer] (ctrl)  at (0, 2) {Controller Layer (REST API / \gls{jwt})};
+    \node[layer] (svc)   at (0, 1) {Service Layer (Logique Métier)};
+    \node[layer] (repo)  at (0, 0) {Repository Layer (Spring Data JPA)};
+    \node[layer] (model) at (0,-1) {Model Layer (Entités JPA)};
+
+    % Base de données
+    \node[rectangle, draw=ForestGreen, fill=ForestGreen!10, thick,
+          rounded corners, minimum width=3cm, minimum height=0.8cm,
+          font=\small] (db) at (0,-2.2) {Base SQLite / afrimarket.db};
+
+    % Flèches
+    \draw[arrow] (client) -- (ctrl);
+    \draw[arrow] (prod)   -- (ctrl);
+    \draw[arrow] (admin)  -- (ctrl);
+    \draw[arrow] (ctrl)   -- (svc);
+    \draw[arrow] (svc)    -- (repo);
+    \draw[arrow] (repo)   -- (model);
+    \draw[arrow] (model)  -- (db);
+  \end{tikzpicture}
+  \caption{Architecture en couches d'AfriMarket}
+  \label{fig:architecture}
+\end{figure}
+
+\subsection{Organisation des applications mobiles}
+
+Les deux applications mobiles (AfriMarket Client et AfriMarket Producteur) suivent la
+même structure dictée par Expo Router. Les routes sont organisées par fichiers dans le
+dossier \texttt{app/}, avec des groupes de routes pour l'authentification (\texttt{(auth)})
+et les onglets principaux (\texttt{(tabs)}). La couche \texttt{services/} encapsule les
+appels \gls{api} vers le backend. La couche \texttt{store/} gère l'état global avec
+Zustand, bibliothèque de gestion d'état légère et sans boilerplate. La couche
+\texttt{components/} organise les composants réutilisables, eux-mêmes subdivisés par
+domaine fonctionnel.
+
+% ─── 3.4 Bilan ─────────────────────────────────────────────
+\section{Bilan méthodologique}
+
+La phase d'analyse et de conception a permis d'établir des fondations solides pour le
+développement. L'identification claire des cinq rôles utilisateurs et de leurs besoins
+spécifiques a guidé la définition des entités du domaine et l'organisation des routes
+\gls{api}. Le choix d'une architecture en couches standard, combiné à une séparation nette
+entre les applications mobiles et le backend via une \gls{api} \gls{rest}, garantit une
+bonne maintenabilité et ouvre la voie à des évolutions futures, comme l'ajout d'un service
+de notifications push ou l'intégration d'une \gls{api} de cartographie pour la
+géolocalisation des points relais. La décision de reporter la migration vers une base de
+données de production (PostgreSQL) à une phase ultérieure, en utilisant SQLite pour le
+développement, a permis d'accélérer les cycles d'itération.
+
+% ============================================================
+%  CHAPITRE 4 – IMPLÉMENTATION ET RÉSULTATS
+% ============================================================
+\chapter{Implémentation et résultats}
+\markboth{Chapitre 4 -- Implémentation et résultats}{}
+
+% ─── 4.1 Choix technologiques ──────────────────────────────
+\section{Choix technologiques}
+
+\subsection{Frontend mobile : React Native avec Expo}
+
+React Native a été retenu pour le développement des applications mobiles AfriMarket
+Client et AfriMarket Producteur. Ce framework JavaScript, développé par Meta, permet de
+produire des applications natives pour iOS et Android à partir d'une base de code unique,
+réduisant ainsi considérablement les délais de développement. Expo, surcouche qui simplifie
+la gestion du cycle de vie React Native, apporte le routeur par fichiers (Expo Router),
+la gestion simplifiée des assets et des outils de débogage efficaces.
+TypeScript a été adopté comme langage de programmation pour bénéficier du typage statique,
+réduisant les erreurs à l'exécution et améliorant l'expérience de développement avec
+l'autocomplétion \gls{ide} \cite{cherny2019}.
+
+\subsection{Gestion d'état : Zustand}
+
+Zustand a été préféré à Redux pour la gestion d'état global dans les applications mobiles.
+Sa philosophie minimaliste (absence de reducers, d'actions et de dispatchers) réduit le
+code boilerplate tout en offrant des performances équivalentes. Les stores
+(\texttt{auth.store.ts}, \texttt{offer.store.ts}, \texttt{wallet.store.ts}) encapsulent
+chacun l'état et les actions d'un domaine fonctionnel.
+
+\subsection{Backend : Spring Boot 4 avec Java 17}
+
+Spring Boot 4, basé sur Jakarta EE 10, constitue le socle du backend. Spring Security
+gère l'authentification et les autorisations : un filtre \gls{jwt} personnalisé
+(\texttt{JwtAuthFilter}) intercepte chaque requête, valide le token et injecte
+l'utilisateur dans le contexte de sécurité. Spring Data \gls{jpa} avec Hibernate assure
+la persistance objet-relationnelle. Lombok élimine le code répétitif
+(getters/setters/constructeurs). La base de données SQLite, via le driver Xerial, est
+utilisée pour le développement ; son fichier \texttt{afrimarket.db} constitue un artefact
+deployable autonome.
+
+\subsection{Administration web : Spring MVC avec Thymeleaf}
+
+L'interface d'administration est une application web classique rendue côté serveur via le
+moteur de templates Thymeleaf, intégrée au même serveur Spring Boot. Cette approche
+simplifie le déploiement (un seul artefact) et exploite Spring Security pour sécuriser
+l'accès à l'espace admin par une authentification formulaire distincte de l'authentification
+\gls{jwt} utilisée par les applications mobiles.
+
+\begin{table}[H]
+  \centering
+  \caption{Récapitulatif des technologies utilisées}
+  \label{tab:technologies}
+  \begin{tabular}{|l|l|l|}
+    \hline
+    \textbf{Composante} & \textbf{Technologie} & \textbf{Version} \\
+    \hline
+    Application consommateur & React Native / Expo & SDK 53 \\
+    \hline
+    Application producteur  & React Native / Expo & SDK 53 \\
+    \hline
+    Langage frontend & TypeScript & 5.x \\
+    \hline
+    Gestion d'état & Zustand & 4.x \\
+    \hline
+    Backend \gls{api} & Spring Boot & 4.0.6 \\
+    \hline
+    Langage backend & Java & 17 \\
+    \hline
+    Sécurité & Spring Security + \gls{jwt} & 6.x \\
+    \hline
+    Persistance & Spring Data JPA / Hibernate & 6.x \\
+    \hline
+    Base de données & SQLite & 3.x \\
+    \hline
+    Templates admin & Thymeleaf & 3.x \\
+    \hline
+    Build backend & Maven & 3.9 \\
+    \hline
+    Gestion dépendances frontend & npm & 10.x \\
+    \hline
+  \end{tabular}
+\end{table}
+
+% ─── 4.2 Implémentation ────────────────────────────────────
+\section{Présentation de l'application AfriMarket}
+
+\subsection{Application consommateur}
+
+L'application consommateur (AfriMarket Client) propose cinq écrans principaux accessibles
+via une barre de navigation inférieure. L'écran \textit{Découvrir} affiche les offres
+actives filtrables par catégorie et par zone, avec un champ de recherche textuelle. Chaque
+carte d'offre présente le titre, la catégorie, le prix unitaire, le producteur et une
+barre de progression indiquant le pourcentage du seuil minimal atteint. En appuyant sur
+une offre, l'utilisateur accède à l'écran de détail qui récapitule toutes les
+informations, liste les points relais disponibles dans la zone et permet de spécifier
+la quantité souhaitée avant de rejoindre l'offre. L'écran \textit{Commandes} liste
+l'historique des participations avec leur statut. L'écran \textit{Explorer} permet de
+parcourir les zones géographiques. Un écran de profil gère les informations personnelles.
+
+\begin{figure}[H]
+  \centering
+  \begin{tikzpicture}
+    % Maquette simplifiée de l'écran Découvrir (fil d'offres)
+    \draw[thick, rounded corners=6pt] (0,0) rectangle (5,9);
+    % Barre de statut
+    \fill[NavyBlue!80] (0,8.5) rectangle (5,9);
+    \node[white, font=\scriptsize] at (2.5,8.75) {AfriMarket — Découvrir};
+    % Barre de recherche
+    \draw[gray!50, rounded corners=3pt, fill=gray!10] (0.2,7.9) rectangle (4.8,8.4);
+    \node[gray, font=\scriptsize] at (2.5,8.15) {Rechercher une offre\ldots};
+    % Filtres catégorie
+    \foreach \x/\lbl in {0.4/Légumes, 1.5/Fruits, 2.6/Tubercules, 3.9/Céréales}{
+      \draw[NavyBlue!60, rounded corners=3pt, fill=NavyBlue!15] (\x,7.4) rectangle (\x+0.9,7.75);
+      \node[NavyBlue, font=\tiny] at (\x+0.45,7.575) {\lbl};
+    }
+    % Carte offre 1
+    \draw[gray!40, rounded corners=4pt, fill=white, drop shadow] (0.2,5.5) rectangle (4.8,7.2);
+    \fill[NavyBlue!20, rounded corners=4pt] (0.2,6.4) rectangle (1.4,7.2);
+    \node[font=\tiny\bfseries] at (2.8,7.0) {Tomates fraîches — Yaoundé 4};
+    \node[font=\tiny, gray] at (2.8,6.75) {par Jean Nkomo · \(\star\) 4.5};
+    \draw[gray!40] (0.5,6.5) rectangle (4.5,6.6);
+    \fill[ForestGreen!70] (0.5,6.5) rectangle (3.2,6.6);  % progression 75%
+    \node[font=\tiny, ForestGreen] at (2.5,6.35) {75\% — 37,5 kg sur 50 kg min.};
+    \node[font=\tiny\bfseries, BrickRed] at (4.0,6.1) {500 FCFA/kg};
+    % Carte offre 2
+    \draw[gray!40, rounded corners=4pt, fill=white] (0.2,3.7) rectangle (4.8,5.4);
+    \fill[NavyBlue!20, rounded corners=4pt] (0.2,4.6) rectangle (1.4,5.4);
+    \node[font=\tiny\bfseries] at (2.8,5.2) {Plantains mûrs — Yaoundé 2};
+    \node[font=\tiny, gray] at (2.8,4.95) {par Marie Ateba · \(\star\) 4.2};
+    \draw[gray!40] (0.5,4.7) rectangle (4.5,4.8);
+    \fill[ForestGreen!70] (0.5,4.7) rectangle (2.0,4.8);  % progression 40%
+    \node[font=\tiny, ForestGreen] at (2.5,4.55) {40\% — 20 kg sur 50 kg min.};
+    \node[font=\tiny\bfseries, BrickRed] at (4.0,4.3) {300 FCFA/kg};
+    % Barre navigation
+    \fill[gray!15] (0,0) rectangle (5,0.8);
+    \foreach \x/\lbl in {0.5/Découvrir, 1.7/Commandes, 2.9/Explorer, 4.1/Profil}{
+      \node[font=\tiny, NavyBlue] at (\x+0.3,0.4) {\lbl};
+    }
+  \end{tikzpicture}
+  \caption{Maquette de l'écran « Découvrir » de l'application consommateur}
+  \label{fig:screen_discover}
+\end{figure}
+
+\subsection{Application producteur}
+
+L'application producteur (AfriMarket Producteur) cible les agriculteurs et leur offre
+un tableau de bord synthétique affichant les revenus du mois, le nombre d'offres actives
+et le solde du wallet disponible. L'écran de création d'offre guide l'utilisateur à travers
+un formulaire multi-étapes : informations générales (titre, description, catégorie), tarification
+et quantités (prix unitaire, quantité disponible, seuil minimal, quantité minimale par
+acheteur), photos de la production, et dates (disponibilité et expiration). Une fois
+soumise, l'offre entre dans la file de validation administrative. L'écran de liste des
+offres affiche le statut de chaque offre et, pour les offres actives, la liste des
+commandes reçues avec les coordonnées des acheteurs. L'écran Wallet permet au producteur
+de visualiser son solde disponible, le montant en attente (commandes confirmées non encore
+virées) et l'historique des transactions, et de déclencher une demande de retrait vers
+son compte Mobile Money (minimum 500 \gls{fcfa}).
+
+\subsection{Interface d'administration}
+
+L'interface d'administration, accessible via navigateur, est protégée par une
+authentification par formulaire. Le tableau de bord principal affiche des indicateurs
+clés : chiffre d'affaires total, nombre de commandes actives, utilisateurs enregistrés et
+offres en attente de validation. Des vues dédiées permettent de gérer les utilisateurs
+(liste, détail, activation/désactivation), les offres (validation, rejet avec motif,
+consultation des photos), les commandes (suivi du cycle de vie), les transactions
+financières, les points relais (création, modification, association à une zone) et les
+paramètres système. L'ensemble est rendu via des templates Thymeleaf avec une mise en
+forme CSS administrative sobre et fonctionnelle.
+
+% ─── 4.3 Résultats ─────────────────────────────────────────
+\section{Résultats}
+
+\subsection{Fonctionnalités livrées}
+
+L'ensemble des fonctionnalités prioritaires identifiées lors de la phase d'analyse a été
+implémenté. Le tableau suivant synthétise l'état de livraison :
+
+\begin{table}[H]
+  \centering
+  \caption{État de livraison des fonctionnalités}
+  \label{tab:livraison}
+  \begin{tabularx}{\textwidth}{|X|l|l|}
+    \hline
+    \textbf{Fonctionnalité} & \textbf{Priorité} & \textbf{Statut} \\
+    \hline
+    Inscription / Connexion (JWT) & Haute & \textcolor{ForestGreen}{\textbf{Livré}} \\
+    \hline
+    Parcourir et filtrer les offres & Haute & \textcolor{ForestGreen}{\textbf{Livré}} \\
+    \hline
+    Rejoindre une offre groupée & Haute & \textcolor{ForestGreen}{\textbf{Livré}} \\
+    \hline
+    Progression en temps réel & Haute & \textcolor{ForestGreen}{\textbf{Livré}} \\
+    \hline
+    Paiement Mobile Money & Haute & \textcolor{orange}{\textbf{Simulation}} \\
+    \hline
+    Créer et soumettre une offre & Haute & \textcolor{ForestGreen}{\textbf{Livré}} \\
+    \hline
+    Téléversement de photos & Moyenne & \textcolor{ForestGreen}{\textbf{Livré}} \\
+    \hline
+    Validation admin des offres & Haute & \textcolor{ForestGreen}{\textbf{Livré}} \\
+    \hline
+    Wallet virtuel et retrait & Haute & \textcolor{ForestGreen}{\textbf{Livré}} \\
+    \hline
+    Tableau de bord admin & Moyenne & \textcolor{ForestGreen}{\textbf{Livré}} \\
+    \hline
+    Gestion des points relais & Moyenne & \textcolor{ForestGreen}{\textbf{Livré}} \\
+    \hline
+    Notifications push & Faible & \textcolor{gray}{\textbf{Non livré}} \\
+    \hline
+    Géolocalisation des relais & Faible & \textcolor{gray}{\textbf{Non livré}} \\
+    \hline
+  \end{tabularx}
+\end{table}
+
+\subsection{Structure de l'API REST}
+
+L'\gls{api} \gls{rest} expose des ressources organisées selon les conventions du standard.
+Les endpoints sont regroupés sous le préfixe \texttt{/api/v1/} et protégés par
+l'authentification \gls{jwt}, à l'exception des routes d'authentification
+(\texttt{/api/v1/auth/login}, \texttt{/api/v1/auth/register}).
+
+\begin{table}[H]
+  \centering
+  \caption{Principaux endpoints de l'API AfriMarket}
+  \label{tab:api_endpoints}
+  \begin{tabular}{|l|l|l|}
+    \hline
+    \textbf{Méthode} & \textbf{Endpoint} & \textbf{Description} \\
+    \hline
+    POST & /api/v1/auth/login & Authentification, retourne un JWT \\
+    \hline
+    POST & /api/v1/auth/register & Inscription d'un nouvel utilisateur \\
+    \hline
+    GET  & /api/v1/offers & Liste des offres actives (filtrables) \\
+    \hline
+    GET  & /api/v1/offers/\{id\} & Détail d'une offre \\
+    \hline
+    POST & /api/v1/offers/\{id\}/join & Rejoindre une offre groupée \\
+    \hline
+    GET  & /api/v1/offers/mine & Mes offres (producteur) \\
+    \hline
+    POST & /api/v1/offers & Créer une offre (producteur) \\
+    \hline
+    POST & /api/v1/offers/\{id\}/submit & Soumettre une offre à validation \\
+    \hline
+    GET  & /api/v1/orders/mine & Mes commandes (consommateur) \\
+    \hline
+    GET  & /api/v1/wallet & Solde et infos du wallet \\
+    \hline
+    POST & /api/v1/wallet/withdraw & Demander un retrait MoMo \\
+    \hline
+    GET  & /api/v1/zones & Liste des zones géographiques \\
+    \hline
+    GET  & /api/v1/relays & Liste des points relais \\
+    \hline
+  \end{tabular}
+\end{table}
+
+\subsection{Bilan et perspectives}
+
+Le projet AfriMarket a atteint ses objectifs principaux en livrant une solution mobile
+complète et fonctionnelle répondant aux besoins identifiés des producteurs et consommateurs
+camerounais. Les trois interfaces (consommateur, producteur, admin) s'articulent
+correctement autour du backend unifié, et le mécanisme d'offres groupées constitue la
+valeur ajoutée principale du système.
+
+Plusieurs améliorations sont envisagées pour les versions futures. L'intégration réelle
+des \gls{api} Mobile Money (MTN et Orange) remplacerait la simulation actuelle et
+permettrait un déploiement en production. L'ajout des notifications push (via Firebase
+Cloud Messaging) améliorerait l'engagement des utilisateurs. La migration de SQLite vers
+PostgreSQL garantirait la fiabilité et les performances en environnement de production.
+Enfin, l'implémentation d'un système de recommandation basé sur les préférences d'achat
+et la géolocalisation enrichirait l'expérience de découverte des offres.
+
+% ============================================================
+%  CONCLUSION GÉNÉRALE
+% ============================================================
+\chapter*{Conclusion générale}
+\addcontentsline{toc}{chapter}{Conclusion générale}
+
+Ce rapport a présenté le projet AfriMarket, une application mobile marketplace agricole
+pair-à-pair développée pour le contexte camerounais. Partant d'un problème de terrain bien
+identifié — la difficulté pour les agriculteurs péri-urbains d'accéder aux marchés urbains
+à prix équitable — nous avons conduit un processus complet allant de l'analyse des besoins
+à la livraison d'une solution fonctionnelle.
+
+L'état de l'art a confirmé l'absence de solution adaptée au marché camerounais combinant
+offres groupées, réseau de points relais, wallet virtuel et prise en charge native du
+Mobile Money. Ce vide justifiait le développement d'AfriMarket comme solution sur mesure
+plutôt que l'adaptation d'une plateforme existante.
+
+La phase de conception a permis d'établir un modèle de données robuste autour de neuf
+entités interconnectées, un découpage clair des rôles utilisateurs et une architecture en
+couches garantissant la maintenabilité. Le choix de React Native avec Expo pour le
+frontend et de Spring Boot 4 pour le backend a été motivé par la productivité, la
+maturité des écosystèmes et l'adéquation au contexte mobile africain.
+
+Les résultats obtenus attestent de la faisabilité technique de la solution : les
+fonctionnalités prioritaires sont livrées et les architectures retenues tiennent leurs
+promesses en termes de séparation des préoccupations et d'évolutivité. L'intégration
+réelle des paiements Mobile Money et le déploiement sur les stores iOS et Android
+constituent les prochaines étapes naturelles pour transformer ce prototype académique en
+produit commercialisable.
+
+Au-delà de l'aspect technique, ce projet a été une expérience enrichissante de gestion de
+la complexité d'un système multi-acteurs, de prise de décision architecturale sous
+contrainte de temps, et d'adaptation des meilleures pratiques du développement logiciel
+aux réalités du terrain africain.
+
+% ============================================================
+%  ANNEXES
+% ============================================================
+\appendix
+\chapter{Extraits de code significatifs}
+\markboth{Annexe A -- Extraits de code}{}
+
+\section{Filtre d'authentification JWT (backend)}
+
+\begin{lstlisting}[language=Java, caption={JwtAuthFilter.java -- Filtre Spring Security},
+  label=lst:jwtfilter]
+// Filtre Spring Security : intercepte chaque requete HTTP,
+// extrait le token JWT de l'en-tete Authorization,
+// le valide et injecte l'utilisateur dans le contexte de securite.
+@Component
+@RequiredArgsConstructor
+public class JwtAuthFilter extends OncePerRequestFilter {
+
+    private final JwtService jwtService;
+    private final UserDetailsService userDetailsService;
+
+    @Override
+    protected void doFilterInternal(HttpServletRequest request,
+            HttpServletResponse response, FilterChain filterChain)
+            throws ServletException, IOException {
+
+        final String authHeader = request.getHeader("Authorization");
+
+        // Si l'en-tete est absent ou ne commence pas par "Bearer ", on passe
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
+        // Extraction du token (on retire le prefixe "Bearer ")
+        final String jwt = authHeader.substring(7);
+        final String userPhone = jwtService.extractUsername(jwt);
+
+        // Si le token est valide et qu'aucune authentification n'est en cours
+        if (userPhone != null &&
+            SecurityContextHolder.getContext().getAuthentication() == null) {
+
+            UserDetails userDetails =
+                userDetailsService.loadUserByUsername(userPhone);
+
+            if (jwtService.isTokenValid(jwt, userDetails)) {
+                // Injection de l'utilisateur dans le contexte de securite
+                UsernamePasswordAuthenticationToken authToken =
+                    new UsernamePasswordAuthenticationToken(
+                        userDetails, null,
+                        userDetails.getAuthorities());
+                authToken.setDetails(
+                    new WebAuthenticationDetailsSource()
+                        .buildDetails(request));
+                SecurityContextHolder.getContext()
+                    .setAuthentication(authToken);
+            }
+        }
+        filterChain.doFilter(request, response);
+    }
+}
+\end{lstlisting}
+
+\section{Store Wallet avec Zustand (frontend producteur)}
+
+\begin{lstlisting}[language=Java, caption={wallet.store.ts -- Gestion d'état avec Zustand},
+  label=lst:walletstore]
+// Store Zustand pour le wallet du producteur.
+// Encapsule l'etat (wallet, transactions, loading) et les actions.
+interface WalletState {
+  wallet: WalletDto | null;
+  transactions: TransactionDto[];
+  loading: boolean;
+  fetchWallet: () => Promise<void>;
+  fetchTransactions: () => Promise<void>;
+}
+
+export const useWalletStore = create<WalletState>((set) => ({
+  wallet: null,
+  transactions: [],
+  loading: false,
+
+  // Charge le solde du wallet depuis l'API backend
+  fetchWallet: async () => {
+    set({ loading: true });
+    try {
+      const data = await apiGet<WalletDto>(API.WALLET);
+      set({ wallet: data });
+    } finally {
+      set({ loading: false });
+    }
+  },
+
+  // Charge l'historique des transactions
+  fetchTransactions: async () => {
+    const data = await apiGet<TransactionDto[]>(API.TRANSACTIONS);
+    set({ transactions: data });
+  },
+}));
+\end{lstlisting}
+
+\chapter{Modèle de données complet}
+\markboth{Annexe B -- Modèle de données}{}
+
+\begin{table}[H]
+  \centering
+  \caption{Entités de la base de données AfriMarket}
+  \label{tab:entities}
+  \begin{tabularx}{\textwidth}{|l|X|l|}
+    \hline
+    \textbf{Entité} & \textbf{Champs principaux} & \textbf{Relations} \\
+    \hline
+    User & id, phone, fullName, role, status, momoNumber, momoProvider, zone, ratingAvg & ManyToOne Zone \\
+    \hline
+    Offer & id, producer, title, category, unit, pricePerUnit, availableQty, minThreshold, minQtyPerBuyer, currentQtyOrdered, status, expiresAt & ManyToOne User, OneToMany OfferPhoto \\
+    \hline
+    Order & id, offer, buyer, relay, qtyOrdered, unitPriceSnapshot, totalAmount, status, paymentProvider, paidAt & ManyToOne Offer, User, RelayPoint \\
+    \hline
+    Transaction & id, order, type, amount, commission, netAmount, momoRef, status & ManyToOne Order \\
+    \hline
+    RelayPoint & id, name, address, zone, latitude, longitude & ManyToOne Zone \\
+    \hline
+    Zone & id, name, region & -- \\
+    \hline
+    OfferPhoto & id, offer, url, isPrimary & ManyToOne Offer \\
+    \hline
+    Dispute & id, order, reason, status, resolution & ManyToOne Order \\
+    \hline
+    Rating & id, rater, rated, offer, score, comment & ManyToOne User, Offer \\
+    \hline
+  \end{tabularx}
+\end{table}
+
+% ============================================================
+%  BIBLIOGRAPHIE (auto via biblatex)
+% ============================================================
+\printbibliography[heading=bibintoc, title={Références bibliographiques}]
+
+\end{document}
